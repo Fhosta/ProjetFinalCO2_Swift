@@ -26,6 +26,7 @@ struct ContentView_Previews: PreviewProvider {
 
 struct MessageView: View {
     @State var topic: String = ""
+    @State var topic2: String = ""
     @State var message: String = ""
     @EnvironmentObject private var mqttManager: MQTTManager
     var body: some View {
@@ -34,6 +35,7 @@ struct MessageView: View {
             VStack {
                 HStack {
                     MQTTTextField(placeHolderMessage: "Enter a topic to subscribe", isDisabled: !mqttManager.isConnected() || mqttManager.isSubscribed(), message: $topic)
+                    MQTTTextField(placeHolderMessage: "Enter a topic to subscribe", isDisabled: !mqttManager.isConnected() || mqttManager.isSubscribed(), message: $topic2)
                     Button(action: functionFor(state: mqttManager.currentAppState.appConnectionState)) {
                         Text(titleForSubscribButtonFrom(state: mqttManager.currentAppState.appConnectionState))
                             .font(.system(size: 14.0))
@@ -41,7 +43,6 @@ struct MessageView: View {
                         .frame(width: 100)
                         .disabled(!mqttManager.isConnected() || topic.isEmpty)
                 }
-
                 HStack {
                     MQTTTextField(placeHolderMessage: "Enter a message", isDisabled: !mqttManager.isSubscribed(), message: $message)
                     Button(action: { send(message: message) }) {
@@ -66,6 +67,7 @@ struct MessageView: View {
 
     private func subscribe(topic: String) {
         mqttManager.subscribe(topic: topic)
+        mqttManager.subscribe(topic: topic2)
     }
 
     private func usubscribe() {

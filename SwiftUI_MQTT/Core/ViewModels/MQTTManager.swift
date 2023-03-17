@@ -6,7 +6,6 @@
 //
 
 import Foundation
-
 import CocoaMQTT
 import Combine
 
@@ -133,7 +132,7 @@ extension MQTTManager: CocoaMQTTDelegate {
 
     func mqtt(_ mqtt: CocoaMQTT, didReceiveMessage message: CocoaMQTTMessage, id: UInt16) {
         TRACE("message: \(message.string.description), id: \(id)")
-        currentAppState.setReceivedMessage(text: message.string.description)
+        currentAppState.setReceivedMessage(text: "CO2 : "+message.string.description)
     }
 
     func mqtt(_ mqtt: CocoaMQTT, didUnsubscribeTopic topic: String) {
