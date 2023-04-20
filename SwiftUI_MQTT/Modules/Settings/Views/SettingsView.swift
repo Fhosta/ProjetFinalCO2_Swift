@@ -45,7 +45,7 @@ struct SettingsView: View {
         mqttManager.initializeMQTT(host: brokerAddress, identifier: UUID().uuidString)
         // Connect
         mqttManager.connect()
-    }
+    } 
 
     private func disconnect() {
         mqttManager.disconnect()

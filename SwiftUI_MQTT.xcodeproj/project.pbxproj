@@ -23,6 +23,7 @@
 		76E9C21125B87B5000ABC54D /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E9C21025B87B5000ABC54D /* SettingsView.swift */; };
 		8F40B6AF9ABE8DCB95A16598 /* Pods_SwiftUI_MQTT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A97845E603D323C7F368F6DB /* Pods_SwiftUI_MQTT.framework */; };
 		A716759E6A10C988067EF5E5 /* Pods_SwiftUI_MQTT_SwiftUI_MQTTUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 748801DE720880F0B38F3D7A /* Pods_SwiftUI_MQTT_SwiftUI_MQTTUITests.framework */; };
+		B46EDFBA29D7048C00097B07 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46EDFB929D7048C00097B07 /* LoginView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +69,7 @@
 		76E9C21025B87B5000ABC54D /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		9610A6BB5C2B171B2F1EED1C /* Pods-SwiftUI_MQTT.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftUI_MQTT.release.xcconfig"; path = "Target Support Files/Pods-SwiftUI_MQTT/Pods-SwiftUI_MQTT.release.xcconfig"; sourceTree = "<group>"; };
 		A97845E603D323C7F368F6DB /* Pods_SwiftUI_MQTT.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftUI_MQTT.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B46EDFB929D7048C00097B07 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		C1ABA56F6DA71AF4EC34A62D /* Pods-SwiftUI_MQTT.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftUI_MQTT.debug.xcconfig"; path = "Target Support Files/Pods-SwiftUI_MQTT/Pods-SwiftUI_MQTT.debug.xcconfig"; sourceTree = "<group>"; };
 		FA7715F63375E11AD7A7F440 /* Pods_SwiftUI_MQTTTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftUI_MQTTTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF5A2B6385BC3AFE1740315F /* Pods-SwiftUI_MQTT-SwiftUI_MQTTUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftUI_MQTT-SwiftUI_MQTTUITests.debug.xcconfig"; path = "Target Support Files/Pods-SwiftUI_MQTT-SwiftUI_MQTTUITests/Pods-SwiftUI_MQTT-SwiftUI_MQTTUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -208,6 +210,7 @@
 		76E9C20B25B87A2900ABC54D /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				B46EDFB829D7045400097B07 /* Login */,
 				76E9C20D25B87A4200ABC54D /* Message */,
 				76E9C20C25B87A3600ABC54D /* Settings */,
 			);
@@ -269,6 +272,14 @@
 				FA7715F63375E11AD7A7F440 /* Pods_SwiftUI_MQTTTests.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		B46EDFB829D7045400097B07 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				B46EDFB929D7048C00097B07 /* LoginView.swift */,
+			);
+			path = Login;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -534,6 +545,7 @@
 				76E2F56525B72C4B00237134 /* MQTTAppState.swift in Sources */,
 				76E2F55D25B71DCD00237134 /* MQTTManager.swift in Sources */,
 				76C85F9A269CB5C4007BDB95 /* MQTTTextField.swift in Sources */,
+				B46EDFBA29D7048C00097B07 /* LoginView.swift in Sources */,
 				76E2F52C25B71BDD00237134 /* SwiftUI_MQTTApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

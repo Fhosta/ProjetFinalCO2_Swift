@@ -57,7 +57,7 @@ struct MessageView: View {
 
             Spacer()
         }
-        .navigationTitle("Messages")
+        .navigationTitle("Gestion des capteurs")
         .navigationBarItems(trailing: NavigationLink(
             destination: SettingsView(brokerAddress: mqttManager.currentHost() ?? ""),
             label: {
