@@ -54,7 +54,7 @@ struct LoginView: View {
                     }
                     .foregroundColor(.black)
                     .frame(width: 300, height: 50)
-                    .background(Color.white)
+                    .background(Color.gray)
                     .cornerRadius(10)
                     
                     NavigationLink(destination: MessagesView(), isActive: $showingLoginScreen) {

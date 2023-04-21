@@ -33,16 +33,7 @@ struct MessageView: View {
         VStack {
             ConnectionStatusBar(message: mqttManager.connectionStateMessage(), isConnected: mqttManager.isConnected())
             VStack {
-                HStack {
-                    MQTTTextField(placeHolderMessage: "Enter a topic to subscribe", isDisabled: !mqttManager.isConnected() || mqttManager.isSubscribed(), message: $topic)
-                    MQTTTextField(placeHolderMessage: "Enter a topic to subscribe", isDisabled: !mqttManager.isConnected() || mqttManager.isSubscribed(), message: $topic2)
-                    Button(action: functionFor(state: mqttManager.currentAppState.appConnectionState)) {
-                        Text(titleForSubscribButtonFrom(state: mqttManager.currentAppState.appConnectionState))
-                            .font(.system(size: 14.0))
-                    }.buttonStyle(BaseButtonStyle(foreground: .white, background: .green))
-                        .frame(width: 100)
-                        .disabled(!mqttManager.isConnected() || topic.isEmpty)
-                }
+               
                 HStack {
                     MQTTTextField(placeHolderMessage: "Enter a message", isDisabled: !mqttManager.isSubscribed(), message: $message)
                     Button(action: { send(message: message) }) {
