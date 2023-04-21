@@ -18,6 +18,13 @@ struct MessagesView: View {
     }
 }
 
+struct MyData: Codable{
+    var CO2Min: Int
+    var CO2Max: Int
+    var TVOCMin: Int
+    var TVOCMax: Int
+}
+
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         MessagesView()
@@ -36,11 +43,10 @@ struct MessageView: View {
         VStack {
             ConnectionStatusBar(message: mqttManager.connectionStateMessage(), isConnected: mqttManager.isConnected())
             VStack {
-               
                 HStack {
                     MQTTTextField(placeHolderMessage: "Enter a message", isDisabled: !mqttManager.isSubscribed(), message: $message)
                     Button(action: { send(message: message) }) {
-                        Text("Send").font(.body)
+                        Text("Envoyer").font(.body)
                     }.buttonStyle(BaseButtonStyle(foreground: .white, background: .green))
                         .frame(width: 80)
                         .disabled(!mqttManager.isSubscribed() || message.isEmpty)
@@ -48,7 +54,7 @@ struct MessageView: View {
                 MessageHistoryTextView(text: $mqttManager.currentAppState.historyText
                 ).frame(height: 150)
             }.padding(EdgeInsets(top: 0, leading: 7, bottom: 0, trailing: 7))
-
+            
             Spacer()
         }
         .navigationTitle("Gestion des capteurs")
@@ -59,9 +65,8 @@ struct MessageView: View {
             }))
     }
 
-    
     func fetchAPI() {
-        let urlString = "https://example.com/api/data"
+        let urlString = "http://172.16.6.53:8080/api/getParametre"
 
         guard let url = URL(string: urlString) else {
             print("Invalid URL")
