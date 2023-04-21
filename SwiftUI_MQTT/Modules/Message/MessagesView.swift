@@ -25,9 +25,12 @@ struct ContentView_Previews: PreviewProvider {
 }
 
 struct MessageView: View {
+    
     @State var topic: String = ""
     @State var topic2: String = ""
     @State var message: String = ""
+    @State var data = [MyData]()
+    
     @EnvironmentObject private var mqttManager: MQTTManager
     var body: some View {
         VStack {
@@ -56,6 +59,39 @@ struct MessageView: View {
             }))
     }
 
+    
+    func fetchAPI() {
+        let urlString = "https://example.com/api/data"
+
+        guard let url = URL(string: urlString) else {
+            print("Invalid URL")
+            return
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+            guard let data = data else {
+                if let error = error {
+                    print("Error: (error.localizedDescription)")
+                }
+                return
+            }
+
+            // Parse the JSON data
+            do {
+                let decodedData = try JSONDecoder().decode([MyData].self, from: data)
+                // Do something with the decoded data
+                print(decodedData)
+            } catch {
+                print("Error: (error.localizedDescription)")
+            }
+        }
+
+        task.resume()
+    }
+    
     private func subscribe(topic: String) {
         mqttManager.subscribe(topic: topic)
         mqttManager.subscribe(topic: topic2)

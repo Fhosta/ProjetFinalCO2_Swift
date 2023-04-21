@@ -66,7 +66,7 @@ struct LoginView: View {
     }
     
     func login(username: String, password: String) {
-        guard let url = URL(string: "\(apiUrl)/login") else {
+        guard let url = URL(string: "\(apiUrl)/api/login") else {
             return
         }
         let body: [String: Any] = [

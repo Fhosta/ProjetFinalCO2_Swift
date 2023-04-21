@@ -37,7 +37,7 @@ struct SettingsView: View {
                         .disabled(!mqttManager.isConnected() || topic.isEmpty)
                 }
                     Text("CO2 MINIMUM :")
-                        .font(.title3)
+                        .font(.system(size:10))
                         .bold()
                         .padding()
                     
@@ -48,7 +48,7 @@ struct SettingsView: View {
                         .cornerRadius(10)
                     
                     Text("CO2 MAXIMUM :")
-                        .font(.title3)
+                        .font(.system(size:10))
                         .bold()
                         .padding()
                     
@@ -58,7 +58,7 @@ struct SettingsView: View {
                         .background(Color.black.opacity(0.05))
                         .cornerRadius(10)
                     Text("TVOC MINIMUM:")
-                        .font(.title3)
+                        .font(.system(size:10))
                         .bold()
                         .padding()
                     
@@ -68,7 +68,7 @@ struct SettingsView: View {
                         .background(Color.black.opacity(0.05))
                         .cornerRadius(10)
                     Text("TVOC MAXIXUM :")
-                        .font(.title3)
+                        .font(.system(size:10))
                         .bold()
                         .padding()
                     
@@ -77,16 +77,48 @@ struct SettingsView: View {
                         .frame(width: 200, height: 35)
                         .background(Color.black.opacity(0.05))
                         .cornerRadius(10)
-                    
-                
-
+        }
+            HStack{
+                Button(action: {
+                    updateSettings()
+                }) {
+                    Text("Mettre à jour les paramètres")
+                        .font(.system(size: 14.0))
+                }
+                .buttonStyle(BaseButtonStyle(foreground: .white, background: .blue))
+                .frame(width: 200, height: 35)
+                .disabled(!mqttManager.isConnected())
         }
         .navigationTitle("Réglages")
         .navigationBarTitleDisplayMode(.inline)
         }
     }
-
-    // Configure / enable /disable connect button
+    
+    
+    private func updateSettings() {
+        guard let url = URL(string: "http://172.16.6.53:8080/api/parametre") else { return }
+        var request = URLRequest(url: url)
+        request.httpMethod = "PUT"
+        let settings = ["CO2Max": CO2Max, "CO2Min": CO2Min, "TVOCMin": TVOCMin, "TVOCMax": TVOCMax]
+        guard let httpBody = try? JSONSerialization.data(withJSONObject: settings, options: []) else { return }
+        request.httpBody = httpBody
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        let session = URLSession.shared
+        let task = session.dataTask(with: request) { (data, response, error) in
+            if let error = error {
+                print("Error: (error.localizedDescription)")
+            }
+            guard let data = data else { return }
+            do {
+                let jsonResponse = try JSONSerialization.jsonObject(with: data, options: [])
+                print(jsonResponse)
+            } catch let error {
+                print("Error: (error.localizedDescription)")
+            }
+        }
+        task.resume()
+    }
+    
     private func setUpConnectButton() -> some View  {
         return Button(action: { configureAndConnect() }) {
                 Text("Connexion")
