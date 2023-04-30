@@ -26,7 +26,6 @@ enum MQTTAppConnectionState {
         case .connectedSubscribed:
             return "Souscrit"
         case .connectedUnSubscribed:
-            return "Connected Unsubscribed"
             return "Connexion Desouscrire"
         }
     }
