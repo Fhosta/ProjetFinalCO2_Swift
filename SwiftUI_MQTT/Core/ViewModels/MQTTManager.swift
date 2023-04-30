@@ -14,6 +14,7 @@ final class MQTTManager: ObservableObject {
     private var identifier: String!
     private var host: String!
     private var topic: String!
+    private var topic2: String!
     private var username: String!
     private var password: String!
 
@@ -72,11 +73,20 @@ final class MQTTManager: ObservableObject {
         self.topic = topic
         mqttClient?.subscribe(topic, qos: .qos1)
     }
+    
+    func subscribe2(topic2: String) {
+        self.topic = topic2
+        mqttClient?.subscribe(topic2, qos: .qos1)
+    }
 
     func publish(with message: String) {
         mqttClient?.publish(topic, withString: message, qos: .qos1)
     }
-
+    
+    func publish2(with message2: String) {
+        mqttClient?.publish(topic2, withString: message2, qos: .qos1)
+    }
+    
     func disconnect() {
         mqttClient?.disconnect()
     }
@@ -85,11 +95,16 @@ final class MQTTManager: ObservableObject {
     func unSubscribe(topic: String) {
         mqttClient?.unsubscribe(topic)
     }
+    
+    func unSubscribe(topic2: String) {
+        mqttClient?.unsubscribe(topic2)
+    }
 
     /// Unsubscribe from a topic
     func unSubscribeFromCurrentTopic() {
         mqttClient?.unsubscribe(topic)
     }
+    
     
     func currentHost() -> String? {
         return host
@@ -133,6 +148,10 @@ extension MQTTManager: CocoaMQTTDelegate {
     func mqtt(_ mqtt: CocoaMQTT, didReceiveMessage message: CocoaMQTTMessage, id: UInt16) {
         TRACE("message: \(message.string.description), id: \(id)")
         currentAppState.setReceivedMessage(text: "CO2 : "+message.string.description)
+    }
+    func mqtt(_ mqtt: CocoaMQTT, didReceiveMessage2 message2: CocoaMQTTMessage, id: UInt16) {
+        TRACE("message: \(message2.string.description), id: \(id)")
+        currentAppState.setReceivedMessage(text: "TVOC : "+message2.string.description)
     }
 
     func mqtt(_ mqtt: CocoaMQTT, didUnsubscribeTopic topic: String) {

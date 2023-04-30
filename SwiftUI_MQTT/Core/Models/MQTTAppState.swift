@@ -18,15 +18,16 @@ enum MQTTAppConnectionState {
     var description: String {
         switch self {
         case .connected:
-            return "Connected"
+            return "Connecté"
         case .disconnected:
-            return "Disconnected"
+            return "Déconnecté"
         case .connecting:
-            return "Connecting"
+            return "Connection"
         case .connectedSubscribed:
-            return "Subscribed"
+            return "Souscrit"
         case .connectedUnSubscribed:
             return "Connected Unsubscribed"
+            return "Connexion Desouscrire"
         }
     }
     var isConnected: Bool {

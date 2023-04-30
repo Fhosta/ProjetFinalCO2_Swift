@@ -29,6 +29,7 @@ struct SettingsView: View {
                 HStack{
                     MQTTTextField(placeHolderMessage: "Enter a topic to subscribe", isDisabled: !mqttManager.isConnected() || mqttManager.isSubscribed(), message: $topic)
                     MQTTTextField(placeHolderMessage: "Enter a topic to subscribe", isDisabled: !mqttManager.isConnected() || mqttManager.isSubscribed(), message: $topic2)
+
                     Button(action: functionFor(state: mqttManager.currentAppState.appConnectionState)) {
                         Text(titleForSubscribButtonFrom(state: mqttManager.currentAppState.appConnectionState))
                             .font(.system(size: 14.0))
@@ -154,7 +155,10 @@ struct SettingsView: View {
     
     private func subscribe(topic: String) {
         mqttManager.subscribe(topic: topic)
-        mqttManager.subscribe(topic: topic2)
+    }
+    
+    private func subscribe2(topic2: String) {
+        mqttManager.subscribe2(topic2: topic2)
     }
 
     private func usubscribe() {
@@ -164,9 +168,14 @@ struct SettingsView: View {
     private func functionFor(state: MQTTAppConnectionState) -> () -> Void {
         switch state {
         case .connected, .connectedUnSubscribed, .disconnected, .connecting:
-            return { subscribe(topic: topic) }
+            return {
+                subscribe(topic: topic)
+                subscribe2(topic2: topic2) // Ajout du deuxième topic
+            }
         case .connectedSubscribed:
-            return { usubscribe() }
+            return {
+                usubscribe()
+            }
         }
     }
 }

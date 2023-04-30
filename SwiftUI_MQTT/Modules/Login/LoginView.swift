@@ -57,7 +57,7 @@ struct LoginView: View {
                     .background(Color.gray)
                     .cornerRadius(10)
                     
-                    NavigationLink(destination: MessagesView(), isActive: $showingLoginScreen) {
+                    NavigationLink(destination: MessagesView().navigationBarHidden(true), isActive: $showingLoginScreen) {
                         EmptyView()
                     }
                 }

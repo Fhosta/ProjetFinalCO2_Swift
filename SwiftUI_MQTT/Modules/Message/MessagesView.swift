@@ -37,25 +37,31 @@ struct MessageView: View {
     @State var topic2: String = ""
     @State var message: String = ""
     @State var data = [MyData]()
+    @State var co2Value: String = ""
+    @State var co2Warning: String = ""
     
     @EnvironmentObject private var mqttManager: MQTTManager
     var body: some View {
         VStack {
             ConnectionStatusBar(message: mqttManager.connectionStateMessage(), isConnected: mqttManager.isConnected())
+
             VStack {
                 HStack {
                     MQTTTextField(placeHolderMessage: "Enter a message", isDisabled: !mqttManager.isSubscribed(), message: $message)
                     Button(action: { send(message: message) }) {
                         Text("Envoyer").font(.body)
-                    }.buttonStyle(BaseButtonStyle(foreground: .white, background: .green))
-                        .frame(width: 80)
-                        .disabled(!mqttManager.isSubscribed() || message.isEmpty)
+                    }
+                    .buttonStyle(BaseButtonStyle(foreground: .white, background: .green))
+                    .frame(width: 80)
+                    .disabled(!mqttManager.isSubscribed() || message.isEmpty)
                 }
-                MessageHistoryTextView(text: $mqttManager.currentAppState.historyText
-                ).frame(height: 150)
-            }.padding(EdgeInsets(top: 0, leading: 7, bottom: 0, trailing: 7))
-            
-            Spacer()
+
+                MessageHistoryTextView(text: $mqttManager.currentAppState.historyText)
+                    .frame(height: 150)
+                    .onChange(of: mqttManager.currentAppState.historyText, perform: { newValue in
+                    })
+                Spacer()
+            }
         }
         .navigationTitle("Gestion des capteurs")
         .navigationBarItems(trailing: NavigationLink(
@@ -64,8 +70,9 @@ struct MessageView: View {
                 Image(systemName: "gear")
             }))
     }
+  
 
-    func fetchAPI() {
+    func fetchAPI(completion: @escaping ([MyData]?) -> Void) {
         let urlString = "http://172.16.6.53:8080/api/getParametre"
 
         guard let url = URL(string: urlString) else {
@@ -81,26 +88,24 @@ struct MessageView: View {
                 if let error = error {
                     print("Error: (error.localizedDescription)")
                 }
+                completion(nil)
                 return
             }
 
             // Parse the JSON data
             do {
                 let decodedData = try JSONDecoder().decode([MyData].self, from: data)
-                // Do something with the decoded data
-                print(decodedData)
-            } catch {
-                print("Error: (error.localizedDescription)")
-            }
+                completion(decodedData) // Appel de la closure de complétion avec les données décryptées
+            }catch {
+                    print("Error: (error.localizedDescription)")
+                    completion(nil) // Appel de la closure de complétion avec nil pour indiquer une erreur de décodage
+                    }
         }
 
         task.resume()
     }
     
-    private func subscribe(topic: String) {
-        mqttManager.subscribe(topic: topic)
-        mqttManager.subscribe(topic: topic2)
-    }
+   
 
     private func usubscribe() {
         mqttManager.unSubscribeFromCurrentTopic()
@@ -121,12 +126,15 @@ struct MessageView: View {
         }
     }
 
-    private func functionFor(state: MQTTAppConnectionState) -> () -> Void {
-        switch state {
-        case .connected, .connectedUnSubscribed, .disconnected, .connecting:
-            return { subscribe(topic: topic) }
-        case .connectedSubscribed:
-            return { usubscribe() }
+    private func extractCO2Value(from message: String) -> String {
+        let prefix = "CO2: "
+
+        guard message.hasPrefix(prefix) else {
+            return ""
         }
+
+        let startIndex = message.index(message.startIndex, offsetBy: prefix.count)
+        return String(message[startIndex...])
     }
+
 }
