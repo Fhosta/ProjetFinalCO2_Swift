@@ -47,9 +47,9 @@ struct MessageView: View {
 
             VStack {
                 HStack {
-                    MQTTTextField(placeHolderMessage: "Enter a message", isDisabled: !mqttManager.isSubscribed(), message: $message)
+                    MQTTTextField(placeHolderMessage: "Entrez un message".localized, isDisabled: !mqttManager.isSubscribed(), message: $message)
                     Button(action: { send(message: message) }) {
-                        Text("Envoyer").font(.body)
+                        Text("Envoyer".localized).font(.body)
                     }
                     .buttonStyle(BaseButtonStyle(foreground: .white, background: .green))
                     .frame(width: 80)
@@ -63,7 +63,7 @@ struct MessageView: View {
                 Spacer()
             }
         }
-        .navigationTitle("Gestion des capteurs")
+        .navigationTitle("Gestion des capteurs".localized)
         .navigationBarItems(trailing: NavigationLink(
             destination: SettingsView(brokerAddress: mqttManager.currentHost() ?? ""),
             label: {
