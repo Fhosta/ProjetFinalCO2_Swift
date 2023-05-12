@@ -1,0 +1,17 @@
+/* 
+  Localizable.strings
+  SwiftUI_MQTT
+
+  Created by Florian on 2023-05-12.
+  
+*/
+"Entrez le topic pour souscrire" = "Enter the topic to susbscribe";
+"Connecté" = "Connected";
+"Déconnecté" = "Disconnected";
+"Connection" = "Connection";
+"Entrez l'adresse du broker" = "Enter the broker's address";
+"Mettre à jour les paramètres" = "Update settings";
+"Connexion" = "Connection";
+"Deconnexion" = "Deconnection";
+"Souscrire" = "Subscribe";
+

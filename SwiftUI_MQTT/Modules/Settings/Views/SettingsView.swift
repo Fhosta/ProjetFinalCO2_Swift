@@ -7,6 +7,32 @@
 
 import SwiftUI
 
+
+
+extension String {
+
+    var localized: String {
+        let lang = currentLanguage()
+        let path = Bundle.main.path(forResource: lang, ofType: "lproj")
+        let bundle = Bundle(path: path!)
+        return NSLocalizedString(self, tableName: nil, bundle: bundle!, value: "", comment: "")
+    }
+
+    func saveLanguage(_ lang: String) {
+        UserDefaults.standard.set(lang, forKey: "Locale")
+        UserDefaults.standard.synchronize()
+    }
+
+    func currentLanguage() -> String {
+        return (Language.ID(rawValue: UserDefaults.standard.string(forKey: "Locale") ?? "fr") ?? Language.fr).rawValue
+    }
+}
+
+enum Language: String, CaseIterable, Identifiable {
+    case fr,en
+    var id: Self { self }
+}
+
 struct SettingsView: View {
     @State var topic: String = ""
     @State var CO2Min: String = ""
@@ -15,20 +41,30 @@ struct SettingsView: View {
     @State var TVOCMax: String = ""
     @State var topic2: String = ""
     @State var brokerAddress: String = ""
+    @State var selectedLanguage = Language.fr
     @EnvironmentObject private var mqttManager: MQTTManager
     var body: some View {
         VStack {
             ConnectionStatusBar(message: mqttManager.connectionStateMessage(), isConnected: mqttManager.isConnected())
             VStack
             {
+                Picker("Language".localized, selection: $selectedLanguage) {
+                                      Text("Français").tag(Language.fr)
+                                      Text("English").tag(Language.en)
+                                  }.onChange(of: selectedLanguage) { newValue in
+                                      UserDefaults.standard.removeObject(forKey: "Locale")
+                                      mqttManager.currentLanguageState.setAppLanguage(language: "\(newValue)")
+                                      UserDefaults.standard.set("\(newValue)", forKey: "Locale")
+                                      UserDefaults.standard.synchronize()
+                                  }
                 HStack{
-                    MQTTTextField(placeHolderMessage: "Entré l'adresse du broker", isDisabled: mqttManager.currentAppState.appConnectionState != .disconnected, message: $brokerAddress)
+                    MQTTTextField(placeHolderMessage: "Entrez l'adresse du broker".localized, isDisabled: mqttManager.currentAppState.appConnectionState != .disconnected, message: $brokerAddress)
                     setUpConnectButton()
                     setUpDisconnectButton()
                 }.padding(.vertical,30)
                 HStack{
-                    MQTTTextField(placeHolderMessage: "Enter a topic to subscribe", isDisabled: !mqttManager.isConnected() || mqttManager.isSubscribed(), message: $topic)
-                    MQTTTextField(placeHolderMessage: "Enter a topic to subscribe", isDisabled: !mqttManager.isConnected() || mqttManager.isSubscribed(), message: $topic2)
+                    MQTTTextField(placeHolderMessage: "Entrez le topic pour souscrire".localized, isDisabled: !mqttManager.isConnected() || mqttManager.isSubscribed(), message: $topic)
+                    MQTTTextField(placeHolderMessage: "Entrez le topic pour souscrire".localized, isDisabled: !mqttManager.isConnected() || mqttManager.isSubscribed(), message: $topic2)
 
                     Button(action: functionFor(state: mqttManager.currentAppState.appConnectionState)) {
                         Text(titleForSubscribButtonFrom(state: mqttManager.currentAppState.appConnectionState))
@@ -37,45 +73,36 @@ struct SettingsView: View {
                         .frame(width: 100)
                         .disabled(!mqttManager.isConnected() || topic.isEmpty)
                 }
-                    Text("CO2 MINIMUM :")
+                    Text("CO2 MIN :")
                         .font(.system(size:10))
                         .bold()
                         .padding()
                     
                     TextField("CO2 min", text: $CO2Min)
                         .padding()
-                        .frame(width: 200, height: 35)
+                        .frame(width: 150, height: 30)
                         .background(Color.black.opacity(0.05))
                         .cornerRadius(10)
                     
-                    Text("CO2 MAXIMUM :")
+                    Text("CO2 MAX :")
                         .font(.system(size:10))
                         .bold()
                         .padding()
                     
                     TextField("CO2 max", text: $CO2Max)
                         .padding()
-                        .frame(width: 200, height: 35)
+                        .frame(width: 150, height: 30)
                         .background(Color.black.opacity(0.05))
                         .cornerRadius(10)
-                    Text("TVOC MINIMUM:")
-                        .font(.system(size:10))
-                        .bold()
-                        .padding()
-                    
-                    TextField("TVOC min", text: $TVOCMin)
-                        .padding()
-                        .frame(width: 200, height: 35)
-                        .background(Color.black.opacity(0.05))
-                        .cornerRadius(10)
-                    Text("TVOC MAXIXUM :")
+                
+                    Text("TVOC MAX :")
                         .font(.system(size:10))
                         .bold()
                         .padding()
                     
                     TextField("TVOC max", text: $TVOCMax)
                         .padding()
-                        .frame(width: 200, height: 35)
+                        .frame(width: 150, height: 30)
                         .background(Color.black.opacity(0.05))
                         .cornerRadius(10)
         }
@@ -83,15 +110,20 @@ struct SettingsView: View {
                 Button(action: {
                     updateSettings()
                 }) {
-                    Text("Mettre à jour les paramètres")
+                    Text("Mettre à jour les paramètres".localized)
                         .font(.system(size: 14.0))
                 }
                 .buttonStyle(BaseButtonStyle(foreground: .white, background: .blue))
                 .frame(width: 200, height: 35)
                 .disabled(!mqttManager.isConnected())
         }
-        .navigationTitle("Réglages")
+            
+            
+            .navigationTitle("Réglages".localized)
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear {
+                    selectedLanguage = Language.ID(rawValue: UserDefaults.standard.string(forKey: "Locale") ?? "fr") ?? Language.fr
+                }
         }
     }
     
@@ -122,14 +154,20 @@ struct SettingsView: View {
     
     private func setUpConnectButton() -> some View  {
         return Button(action: { configureAndConnect() }) {
-                Text("Connexion")
+            Text("Connexion".localized)
             }.buttonStyle(BaseButtonStyle(foreground: .white, background: .blue))
         .disabled(mqttManager.currentAppState.appConnectionState != .disconnected || brokerAddress.isEmpty)
     }
     
+    private func setlanguage(_ languages: String)
+    {
+        UserDefaults.standard.set([languages], forKey: "Local")
+                UserDefaults.standard.synchronize()
+    }
+    
     private func setUpDisconnectButton() -> some View  {
         return Button(action: { disconnect() }) {
-            Text("Deconnexion")
+            Text("Deconnexion".localized)
         }.buttonStyle(BaseButtonStyle(foreground: .white, background: .red))
         .disabled(mqttManager.currentAppState.appConnectionState == .disconnected)
     }
@@ -147,9 +185,9 @@ struct SettingsView: View {
     private func titleForSubscribButtonFrom(state: MQTTAppConnectionState) -> String {
         switch state {
         case .connected, .connectedUnSubscribed, .disconnected, .connecting:
-            return "Subscribe"
+            return "Souscrire".localized
         case .connectedSubscribed:
-            return "Unsubscribe"
+            return "Desabonnement".localized
         }
     }
     

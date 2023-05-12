@@ -19,13 +19,18 @@ final class MQTTManager: ObservableObject {
     private var password: String!
 
     @Published var currentAppState = MQTTAppState()
+    @Published var currentLanguageState = LanguageAppState()
     private var anyCancellable: AnyCancellable?
+    private var anyCancellable2: AnyCancellable?
     // Private Init
     private init() {
         // Workaround to support nested Observables, without this code changes to state is not propagated
         anyCancellable = currentAppState.objectWillChange.sink { [weak self] _ in
             self?.objectWillChange.send()
         }
+        anyCancellable2 = currentLanguageState.objectWillChange.sink { [weak self] _ in
+                 self?.objectWillChange.send()
+             }
     }
 
     // MARK: Shared Instance
