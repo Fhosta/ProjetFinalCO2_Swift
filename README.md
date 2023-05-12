@@ -22,8 +22,13 @@ It is possible to clone my Git repository either from the terminal using the com
 
 # Guide d'utilisation :
 
-Une fois l'application lancé une page de Connexion apparait demandant un nom d'utilisateur : "Florian" et un mot de passe : "Root"  une fois connecté  
+Version français : 
 
+Une fois que l'application est lancée, une page de connexion apparaît, demandant un nom d'utilisateur : "Florian" et un mot de passe : "Root". Une fois connecté, une petite roue crantée apparaît en haut à droite de l'interface. Il faut cliquer dessus pour accéder aux paramètres de l'application, se connecter au broker avec l'adresse suivante : 172.16.5.103. On peut également régler les valeurs maximale et minimale du CO2, ainsi que la langue de l'application. Ensuite, toujours sur la même page, il faut entrer les topics nécessaires pour recevoir les informations. Les topics sont les suivants : "CO2" et "TVOC". Une fois les topics entrés, on peut retourner sur la page principale pour voir les valeurs.
+
+English version : 
+
+Once the application is launched, a login page appears asking for a username: "Florian" and a password: "Root". Once logged in, a small gear icon appears at the top right of the interface. Clicking on it allows access to the application settings, where you can connect to the broker with the following address: 172.16.5.103. You can also adjust the maximum and minimum CO2 values and set the language of the application. Then, on the same page, you need to enter the necessary topics to receive the information. The topics are: "CO2" and "TVOC". Once the topics are entered, you can return to the main page to see the values.
 
 # Route vers l'api
 
