@@ -29,12 +29,12 @@ struct LoginView: View {
                     .foregroundColor(.white)
 
                 VStack {
-                    Text("Authentification")
+                    Text("Authentification".localized)
                         .font(.largeTitle)
                         .bold()
                         .padding()
                     
-                    TextField("Utilisateur", text: $username)
+                    TextField("Utilisateur".localized, text: $username)
                         .padding()
                         .frame(width: 300, height: 50)
                         .background(Color.black.opacity(0.05))
@@ -42,14 +42,14 @@ struct LoginView: View {
                         .border(.red, width: CGFloat(wrongUsername))
                         
                     
-                    SecureField("Mot de passe", text: $password)
+                    SecureField("Mot de passe".localized, text: $password)
                         .padding()
                         .frame(width: 300, height: 50)
                         .background(Color.black.opacity(0.05))
                         .cornerRadius(10)
                         .border(.red, width: CGFloat(wrongPassword))
                     
-                    Button("Connexion") {
+                    Button("Connexion".localized) {
                         login(username: username, password: password)
                     }
                     .foregroundColor(.black)
